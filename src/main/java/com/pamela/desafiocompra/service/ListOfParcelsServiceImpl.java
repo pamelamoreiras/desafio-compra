@@ -4,6 +4,7 @@ import com.pamela.desafiocompra.model.ListOfParcelsResponse;
 import com.pamela.desafiocompra.model.Request;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,29 +17,26 @@ public class ListOfParcelsServiceImpl implements ListOfParcelService{
 
         ListOfParcelsResponse listResponse = ListOfParcelsResponse.builder().build();
 
-        var toAddResponseInList = List.of(listResponse);
+        List<ListOfParcelsResponse> toAddResponseInList = new ArrayList<>();
 
         if (request.getPaymentConditionRequest().getNumberOfParcels() > 6) {
-
-            listResponse.setInterestRate(1.15/100);
 
             double finalValuePerParcel = 0.0;
 
             for (int i = 7; i <= request.getPaymentConditionRequest().getNumberOfParcels(); i++) {
 
-                listResponse.setNumberParcel(i);
-                finalValuePerParcel = valuePerParcel(request) * Math.pow(1.0 + listResponse.getInterestRate(), i);
+                ListOfParcelsResponse listaTeste = ListOfParcelsResponse.builder().build();
+
+                listaTeste.setInterestRate(1.15/100);
+
+                listaTeste.setNumberParcel(i);
+
+                finalValuePerParcel = valuePerParcel(request) * Math.pow(1.0 + listaTeste.getInterestRate(), i);
+
+                listaTeste.setValue(finalValuePerParcel);
+
+                toAddResponseInList.add(listaTeste);
             }
-
-            double finalValuePerParcel1 = finalValuePerParcel;
-
-            toAddResponseInList.stream()
-                    .peek(item -> {
-                        item.setNumberParcel(listResponse.getNumberParcel());
-                        item.setValue(finalValuePerParcel1);
-                        item.setInterestRate(listResponse.getInterestRate());
-                    })
-                    .collect(Collectors.toList());
         }
 
         if (request.getPaymentConditionRequest().getNumberOfParcels() <= 6){
