@@ -11,14 +11,20 @@ import java.util.stream.Collectors;
 @Service
 public class ListOfParcelsServiceImpl implements ListOfParcelService{
 
-//    private Request request;
-
     public List<ListOfParcelsResponse> execute(final Request request) {
 
         ListOfParcelsResponse listResponse = ListOfParcelsResponse.builder().build();
 
         List<ListOfParcelsResponse> toAddResponseInList = new ArrayList<>();
 
+        moreThanSix(request, toAddResponseInList);
+
+        lessThanSix(request, toAddResponseInList);
+
+        return toAddResponseInList;
+    }
+
+    private void moreThanSix(Request request, List<ListOfParcelsResponse> toAddResponseInList) {
         if (request.getPaymentConditionRequest().getNumberOfParcels() > 6) {
 
             double finalValuePerParcel = 0.0;
@@ -38,23 +44,25 @@ public class ListOfParcelsServiceImpl implements ListOfParcelService{
                 toAddResponseInList.add(listaTeste);
             }
         }
+    }
 
+    private void lessThanSix(Request request, List<ListOfParcelsResponse> toAddResponseInList) {
         if (request.getPaymentConditionRequest().getNumberOfParcels() <= 6){
 
             for (int i = 1; i <= request.getPaymentConditionRequest().getNumberOfParcels(); i++) {
-                listResponse.setNumberParcel(i);
+
+                ListOfParcelsResponse listaTeste = ListOfParcelsResponse.builder().build();
+
+                listaTeste.setNumberParcel(i);
+
+                listaTeste.setValue(valuePerParcel(request));
+
+                listaTeste.setInterestRate(0.0);
+
+                toAddResponseInList.add(listaTeste);
             }
 
-            toAddResponseInList.stream()
-                    .peek(item -> {
-                        item.setNumberParcel(listResponse.getNumberParcel());
-                        item.setValue(valuePerParcel(request));
-                        item.setInterestRate(0.0);
-                    })
-                    .collect(Collectors.toList());
         }
-
-        return toAddResponseInList;
     }
 
     private Double valuePerParcel(final Request request) {
