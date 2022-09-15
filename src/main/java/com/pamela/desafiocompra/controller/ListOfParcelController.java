@@ -18,7 +18,7 @@ public class ListOfParcelController {
 
     private final ListOfParcelService service;
 
-    @GetMapping
+    @GetMapping(value = "/alef")
     public List<ListOfParcelsResponse> executar(@RequestBody final Request request) {
         return service.execute(request);
     }

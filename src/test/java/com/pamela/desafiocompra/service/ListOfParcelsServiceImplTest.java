@@ -13,7 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 public class ListOfParcelsServiceImplTest {
 
     @InjectMocks
-    ListOfParcelsServiceImpl listService;
+    private ListOfParcelsServiceImpl listService;
 
     @Test
     void quandoReceberOsDadosDaCompraEParcelaForMenorQueSeisRetornaUmaListaDeParcelas() {

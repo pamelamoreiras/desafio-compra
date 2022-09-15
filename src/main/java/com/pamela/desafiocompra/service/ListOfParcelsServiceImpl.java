@@ -60,7 +60,6 @@ public class ListOfParcelsServiceImpl implements ListOfParcelService{
 
                 toAddResponseInList.add(parcelsList);
             }
-
         }
     }
 
@@ -72,6 +71,4 @@ public class ListOfParcelsServiceImpl implements ListOfParcelService{
 
         return (productValue - initialValue) / parcels;
     }
-
-
 }
