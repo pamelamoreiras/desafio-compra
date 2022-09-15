@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class PaymentConditionRequest {
 
     private Double inputValue;
-    private Double numberOfParcels;
+    private Integer numberOfParcels;
 }

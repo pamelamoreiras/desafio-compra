@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ListOfParcelsServiceImpl implements ListOfParcelService{
@@ -17,49 +16,49 @@ public class ListOfParcelsServiceImpl implements ListOfParcelService{
 
         List<ListOfParcelsResponse> toAddResponseInList = new ArrayList<>();
 
-        moreThanSix(request, toAddResponseInList);
+        calculateParcelMoreThanSix(request, toAddResponseInList);
 
-        lessThanSix(request, toAddResponseInList);
+        calculateParcelLessThanSix(request, toAddResponseInList);
 
         return toAddResponseInList;
     }
 
-    private void moreThanSix(Request request, List<ListOfParcelsResponse> toAddResponseInList) {
+    private void calculateParcelMoreThanSix(final Request request, final List<ListOfParcelsResponse> toAddResponseInList) {
         if (request.getPaymentConditionRequest().getNumberOfParcels() > 6) {
 
             double finalValuePerParcel = 0.0;
 
             for (int i = 7; i <= request.getPaymentConditionRequest().getNumberOfParcels(); i++) {
 
-                ListOfParcelsResponse listaTeste = ListOfParcelsResponse.builder().build();
+                ListOfParcelsResponse parcelsList = ListOfParcelsResponse.builder().build();
 
-                listaTeste.setInterestRate(1.15/100);
+                parcelsList.setInterestRate(1.15/100);
 
-                listaTeste.setNumberParcel(i);
+                parcelsList.setNumberParcel(i);
 
-                finalValuePerParcel = valuePerParcel(request) * Math.pow(1.0 + listaTeste.getInterestRate(), i);
+                finalValuePerParcel = valuePerParcel(request) * Math.pow(1.0 + parcelsList.getInterestRate(), i);
 
-                listaTeste.setValue(finalValuePerParcel);
+                parcelsList.setValue(finalValuePerParcel);
 
-                toAddResponseInList.add(listaTeste);
+                toAddResponseInList.add(parcelsList);
             }
         }
     }
 
-    private void lessThanSix(Request request, List<ListOfParcelsResponse> toAddResponseInList) {
+    private void calculateParcelLessThanSix(final Request request, final List<ListOfParcelsResponse> toAddResponseInList) {
         if (request.getPaymentConditionRequest().getNumberOfParcels() <= 6){
 
             for (int i = 1; i <= request.getPaymentConditionRequest().getNumberOfParcels(); i++) {
 
-                ListOfParcelsResponse listaTeste = ListOfParcelsResponse.builder().build();
+                ListOfParcelsResponse parcelsList = ListOfParcelsResponse.builder().build();
 
-                listaTeste.setNumberParcel(i);
+                parcelsList.setNumberParcel(i);
 
-                listaTeste.setValue(valuePerParcel(request));
+                parcelsList.setValue(valuePerParcel(request));
 
-                listaTeste.setInterestRate(0.0);
+                parcelsList.setInterestRate(0.0);
 
-                toAddResponseInList.add(listaTeste);
+                toAddResponseInList.add(parcelsList);
             }
 
         }
